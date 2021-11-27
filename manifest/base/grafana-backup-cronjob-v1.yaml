@@ -1,0 +1,78 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: grafana-backup
+  namespace: default
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    metadata:
+      name: grafana-backup
+    spec:
+      template:
+        metadata:
+          annotations:
+            iam.amazonaws.com/role: arn:aws:iam::799602488836:role/kube2iam-prod-grafana-backup-bucket-writer-role
+        spec:
+          containers:
+          - command:
+            - sh
+            - -c
+            - ./watch.sh ${ENV}
+            env:
+            - name: AWS_REGION
+              value: eu-central-1
+            image: azman0101/s5cmd:feat-support-env-var-advanced-v2
+            imagePullPolicy: Always
+            name: sync
+            resources: {}
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            volumeMounts:
+            - mountPath: /_OUTPUT_
+              name: backup-directory
+          - env:
+            - name: GRAFANA_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-secrets
+                  key: GRAFANA_TOKEN
+            - name: GRAFANA_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-secrets
+                  key: GRAFANA_ADMIN_PASSWORD
+            - name: GRAFANA_URL
+              value: http://kube-prometheus-grafana.monitoring:80
+            - name: GRAFANA_ADMIN_ACCOUNT
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-secrets
+                  key: GRAFANA_ADMIN_ACCOUNT
+            - name: ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: config-grafana-backup
+                  key: ENV
+            image: azman0101/docker-grafana-backup-tool:fix-json-log-decode-v1
+            imagePullPolicy: Always
+            name: grafana-backup
+            resources: {}
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            volumeMounts:
+            - mountPath: /opt/grafana-backup-tool/_OUTPUT_
+              name: backup-directory
+          dnsPolicy: ClusterFirst
+          restartPolicy: OnFailure
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+          - emptyDir: {}
+            name: backup-directory
+      ttlSecondsAfterFinished: 28800
+  schedule: 0 5 * * *
+  successfulJobsHistoryLimit: 3
+  suspend: false
