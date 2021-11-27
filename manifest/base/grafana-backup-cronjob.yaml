@@ -19,10 +19,20 @@ spec:
           - command:
             - sh
             - -c
-            - ./watch.sh ${ENV}
+            - ./watch.sh "${ENV}"
             env:
             - name: AWS_REGION
               value: eu-central-1
+            - name: ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: config-grafana-backup
+                  key: ENV
+            - name: EXPIRES_IN_DAYS
+              valueFrom:
+                configMapKeyRef:
+                  name: config-grafana-backup
+                  key: EXPIRES_IN_DAYS
             image: azman0101/s5cmd:feat-support-env-var-advanced-v2
             imagePullPolicy: Always
             name: sync
@@ -50,11 +60,6 @@ spec:
                 secretKeyRef:
                   name: grafana-secrets
                   key: GRAFANA_ADMIN_ACCOUNT
-            - name: ENV
-              valueFrom:
-                configMapKeyRef:
-                  name: config-grafana-backup
-                  key: ENV
             image: azman0101/docker-grafana-backup-tool:fix-json-log-decode-v1
             imagePullPolicy: Always
             name: grafana-backup
