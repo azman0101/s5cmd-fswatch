@@ -5,7 +5,7 @@ bases:
 - ../../base
 images:
 - name: azman0101/docker-grafana-backup-tool
-  newTag: v1
+  newTag: v2
 - name: azman0101/s5cmd
   newTag: feat-support-env-var-advanced-v2
 
