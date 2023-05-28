@@ -21,4 +21,3 @@ secretGenerator:
 configMapGenerator:
   - name: config-grafana-backup
     env: config.properties
-
