@@ -5,7 +5,7 @@ bases:
 - ../../base
 images:
 - name: azman0101/docker-grafana-backup-tool
-  newTag: v2
+  newTag: latest-v3
 - name: azman0101/s5cmd
   newTag: migrate-to-irsa
 
