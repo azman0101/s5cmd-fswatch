@@ -2,6 +2,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
 - name: azman0101/docker-grafana-backup-tool
+<<<<<<< HEAD
   newTag: v2
+=======
+  newTag: fix-json-log-decode-v1
+>>>>>>> c75d2ab (feat: upgrade stack)
 resources:
 - grafana-backup-cronjob.yaml
+- serviceaccount.yaml

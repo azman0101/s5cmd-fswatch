@@ -3,7 +3,7 @@ kind: AnnotationsTransformer
 metadata:
   name: notImportantHere
 annotations:
-  iam.amazonaws.com/role: arn:aws:iam::799602488836:role/kube2iam-staging-grafana-backup-bucket-writer-role
+  iam.amazonaws.com/role: arn:aws:iam::799602488836:role/kube2iam-int-grafana-backup-bucket-writer-role
 fieldSpecs:
 - kind: CronJob
   path: spec/jobTemplate/metadata/annotations
@@ -14,4 +14,3 @@ fieldSpecs:
 - kind: CronJob
   path: spec/jobTemplate/spec/template/metadata/annotations
   create: true
-
