@@ -14,4 +14,3 @@ fieldSpecs:
 - kind: CronJob
   path: spec/jobTemplate/spec/template/metadata/annotations
   create: true
-
