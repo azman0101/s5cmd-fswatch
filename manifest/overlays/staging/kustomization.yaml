@@ -5,12 +5,13 @@ bases:
 - ../../base
 images:
 - name: azman0101/docker-grafana-backup-tool
-  newTag: v2
+  newTag: latest-v3
 - name: azman0101/s5cmd
-  newTag: feat-support-env-var-advanced-v2
+  newTag: migrate-to-irsa
 
 transformers:
   - annotations.yaml
+  - annotations-irsa.yaml
 
 secretGenerator:
 - name: grafana-secrets

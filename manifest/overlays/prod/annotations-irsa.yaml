@@ -1,0 +1,10 @@
+apiVersion: builtin
+kind: AnnotationsTransformer
+metadata:
+  name: notImportantHereIRSA
+annotations:
+  eks.amazonaws.com/role-arn: arn:aws:iam::799602488836:role/kube2iam-prod-grafana-backup-bucket-writer-role
+fieldSpecs:
+- kind: ServiceAccount
+  path: metadata/annotations
+  create: true

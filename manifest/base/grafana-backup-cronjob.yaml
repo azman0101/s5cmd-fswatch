@@ -60,7 +60,7 @@ spec:
                 secretKeyRef:
                   name: grafana-secrets
                   key: GRAFANA_ADMIN_ACCOUNT
-            image: azman0101/docker-grafana-backup-tool:fix-json-log-decode-v1
+            image: azman0101/docker-grafana-backup-tool:latest-v3
             imagePullPolicy: Always
             name: grafana-backup
             resources: {}
@@ -73,6 +73,8 @@ spec:
           restartPolicy: OnFailure
           schedulerName: default-scheduler
           securityContext: {}
+          serviceAccount: grafana-backup
+          serviceAccountName: grafana-backup
           terminationGracePeriodSeconds: 30
           volumes:
           - emptyDir: {}

@@ -33,7 +33,9 @@ fi
 echo "Start watching"
 fswatch -1 --event Created -v -e "${DIR_TO_BACKUP}/.*" -i "${DIR_TO_BACKUP}/.*\\.tar\\.gz$" -0 "${DIR_TO_BACKUP}" | xargs -0 -n 1 -I {} echo "File {} changed"
 echo "Stop watching... Copy will start in 10s."
-CMD="s5cmd -r 1 --log debug  --endpoint-url \"https://s3.${REGION}.amazonaws.com\" cp --expires \"${EXPIRES_DATE}\" \"${DIR_TO_BACKUP}/*.tar.gz\" \"s3://${BUCKET_PREFIX}-${ENV}/\""
+# since s5cmd is not working with IRSA, we use aws cli instead
+# CMD="s5cmd -r 1 --log debug  --endpoint-url \"https://s3.${REGION}.amazonaws.com\" cp --expires \"${EXPIRES_DATE}\" \"${DIR_TO_BACKUP}/*.tar.gz\" \"s3://${BUCKET_PREFIX}-${ENV}/\""
+CMD="aws s3 cp --recursive --expires \"${EXPIRES_DATE}\" --region \"${REGION}\" \"${DIR_TO_BACKUP}\" \"s3://${BUCKET_PREFIX}-${ENV}/\""
 echo "Launched command: ${CMD}"
 sleep 10
 eval "${CMD}"
